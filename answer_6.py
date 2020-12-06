@@ -7,6 +7,11 @@ import numpy as np
 import os
 import sys 
 
+def usage():
+    print("<usage> : python3 answer_6.py [interface]")
+    print("<example> : pythnon3 answer_6.py wlan0mon")
+
+
 def channel_data(interface):
     channel_list=[]
     tmp=[]
@@ -22,7 +27,12 @@ def channel_data(interface):
     return channel_list
 
 #get used channel data
-interface = 'wlx002666400ba5'
+if(sys.argv[1] == None):
+    usage()
+    exit()
+
+interface = sys.argv[1]
+
 channel = channel_data(interface)
 print("unavailable channel : %s" % str(channel))
 
@@ -40,7 +50,7 @@ for i in range(1,20):
 #write conf file
 conf = open("./hostapd.conf","w")
 data = '''interface=wlx002666400ba5
-ssid=class26_hw6_test_AP
+ssid=class81_hw6_test_AP
 ignore_broadcast_ssid=0
 hw_mode=g
 channel={channel}
@@ -54,9 +64,9 @@ macaddr_acl=0
 '''.format(channel = hostapd_channel)
 conf.write(data)
 conf.close()
-
 print("\n\nhostapd.conf file written.")
 
+#Run Hostapd
 print("\n\n----------Executing HOSTAPD----------")
 os.system("sudo hostapd -d hostapd.conf")
 
