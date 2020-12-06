@@ -27,12 +27,12 @@ def channel_data(interface):
     return channel_list
 
 #get used channel data
-if(sys.argv[1] == None):
+if(len(sys.argv) != 2):
     usage()
     exit()
 
 interface = sys.argv[1]
-
+print("interface is : %s"% interface)
 channel = channel_data(interface)
 print("unavailable channel : %s" % str(channel))
 
@@ -49,8 +49,8 @@ for i in range(1,20):
 
 #write conf file
 conf = open("./hostapd.conf","w")
-data = '''interface=wlx002666400ba5
-ssid=class81_hw6_test_AP
+data = '''interface={interface}
+ssid=class81_hw6_test_APS
 ignore_broadcast_ssid=0
 hw_mode=g
 channel={channel}
@@ -61,7 +61,7 @@ wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 wpa_ptk_rekey=600
 macaddr_acl=0
-'''.format(channel = hostapd_channel)
+'''.format(interface = interface,channel = hostapd_channel)
 conf.write(data)
 conf.close()
 print("\n\nhostapd.conf file written.")
